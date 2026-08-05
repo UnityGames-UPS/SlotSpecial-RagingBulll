@@ -653,17 +653,8 @@ public class UIManager : MonoBehaviour
     public void OnFocusChanged(string value)
     {
         bool focused = value == "1";
-        if (focused)
-        {
-            audioController.ToggleMute(false, "music");
-            audioController.ToggleMute(false, "sound");
-        }
-        else
-        {
-            audioController.ToggleMute(true, "music");
-            audioController.ToggleMute(true, "sound");
-        }
-        //socketManager?.HandleFusChanocge(focused);
+        audioController.SetMuteAll(!focused);
+        socketManager?.HandleFocusChange(focused);
     }
     internal void CloseAllPanels()
     {

@@ -657,6 +657,17 @@ public class SlotBehaviour : MonoBehaviour
         }
     }
 
+    // Backend-pushed balance:sync — snaps the display immediately (not tweened like a
+    // spin result) and re-checks the low-balance gate, since a pushed balance can move
+    // the player from "can spin" to "can't spin" or vice versa outside of any spin flow.
+    internal void UpdateBalanceDisplay(double newBalance)
+    {
+        BalanceTween?.Kill();
+        currentBalance = newBalance;
+        if (Balance_text) Balance_text.text = newBalance.ToString("f3");
+        CompareBalance();
+    }
+
     #region LinesCalculation
 
     //Destroy Static Lines from button hovers
@@ -735,7 +746,9 @@ public class SlotBehaviour : MonoBehaviour
 
     private void OnApplicationFocus(bool focus)
     {
-        audioController.CheckFocusFunction(focus, CheckSpinAudio);
+        audioController.SetMuteAll(!focus);
+        if (focus && !CheckSpinAudio)
+            audioController.StopWLAaudio();
     }
 
     //function to populate animation sprites accordingly

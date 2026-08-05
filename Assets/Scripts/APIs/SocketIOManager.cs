@@ -46,6 +46,11 @@ public class SocketIOManager : MonoBehaviour
   private const int MaxMissedPongs = 10;
   private Coroutine PingRoutine; //Back2 end
 
+  private bool hasFocus = true;
+  private float focusLostTime = 0f;
+  private Coroutine focusCheckRoutine;
+  private float maxBackgroundTime = 60f;
+
   [SerializeField] private GameObject RaycastBlocker;
 
   private void Awake()
@@ -189,14 +194,26 @@ public class SocketIOManager : MonoBehaviour
     gameSocket.On<string>("AnotherDevice", OnSocketOtherDevice); //BackendChanges Finish
     gameSocket.On<string>("appBackground", MuteAudio); //BackendChanges Finish
     gameSocket.On<string>("pong", OnPongReceived);
+    gameSocket.On<string>("balance:sync", OnBalanceSync);
     // Start connecting to the server
     manager.Open();
   }
 
   void MuteAudio(string data)
   {
-    Debug.Log("MuteAudio Event called");
-    slotManager.audioController.CheckFocusFunction(false, false);
+    slotManager.audioController.SetMuteAll(true);
+  }
+
+  // userId/gameId in the payload identify the player/game to the backend and are not used client-side.
+  private void OnBalanceSync(string data)
+  {
+    BalanceSyncPayload syncPayload = JsonConvert.DeserializeObject<BalanceSyncPayload>(data);
+    if (syncPayload == null) return;
+
+    if (playerdata == null) playerdata = new Player();
+    playerdata.balance = syncPayload.balance;
+
+    slotManager.UpdateBalanceDisplay(syncPayload.balance);
   }
 
   // Connected event handler implementation
@@ -225,14 +242,48 @@ public class SocketIOManager : MonoBehaviour
     ResetPingRoutine();
   } //Back2 end
 
+  // Called from the WebGL/JS focus path only (UIManager.OnFocusChanged) — not from
+  // OnApplicationFocus, which isn't reliable enough inside a WebView to gate this timer.
+  internal void HandleFocusChange(bool focus)
+  {
+    hasFocus = focus;
+
+    if (!focus)
+    {
+      focusLostTime = Time.time;
+      if (focusCheckRoutine == null)
+        focusCheckRoutine = StartCoroutine(FocusTimeoutCheck());
+    }
+    else if (focusCheckRoutine != null)
+    {
+      StopCoroutine(focusCheckRoutine);
+      focusCheckRoutine = null;
+    }
+  }
+
+  private IEnumerator FocusTimeoutCheck()
+  {
+    while (!hasFocus)
+    {
+      if (Time.time - focusLostTime >= maxBackgroundTime)
+      {
+        Debug.LogWarning("[SOCKET] Background timeout — closing connection");
+        try { manager?.Close(); }
+        catch (Exception e) { Debug.LogWarning($"[SOCKET] Focus close error: {e.Message}"); }
+        OnDisconnected();
+        focusCheckRoutine = null;
+        yield break;
+      }
+      yield return new WaitForSecondsRealtime(1f);
+    }
+    focusCheckRoutine = null;
+  }
+
   private void OnPongReceived(string data) //Back2 Start
   {
-    Debug.Log("✅ Received pong from server.");
     waitingForPong = false;
     missedPongs = 0;
     lastPongTime = Time.time;
-    Debug.Log($"⏱️ Updated last pong time: {lastPongTime}");
-    Debug.Log($"📦 Pong payload: {data}");
   } //Back2 end
 
   private void OnError(Error err)
@@ -335,8 +386,6 @@ public class SocketIOManager : MonoBehaviour
   {
     while (true)
     {
-      Debug.Log($"🟡 PingCheck | waitingForPong: {waitingForPong}, missedPongs: {missedPongs}, timeSinceLastPong: {Time.time - lastPongTime}");
-
       if (missedPongs == 0)
       {
         uiManager.CheckAndClosePopups();
@@ -364,7 +413,6 @@ public class SocketIOManager : MonoBehaviour
       // Send next ping
       waitingForPong = true;
       lastPongTime = Time.time;
-      Debug.Log("📤 Sending ping...");
       SendDataWithNamespace("ping");
       yield return new WaitForSeconds(pingInterval);
     }
@@ -831,6 +879,12 @@ public class Player
   public double balance { get; set; }
   public double haveWon { get; set; }
   public double currentWining { get; set; }
+}
+
+[Serializable]
+public class BalanceSyncPayload
+{
+  public double balance;
 }
 
 [Serializable]

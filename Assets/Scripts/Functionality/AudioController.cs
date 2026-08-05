@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class AudioController : MonoBehaviour
@@ -10,7 +11,6 @@ public class AudioController : MonoBehaviour
     [SerializeField] private AudioClip[] Bonusclips;
     [SerializeField] private AudioSource bg_audioBonus;
     [SerializeField] private AudioSource audioPlayer_Bonus;
-    [SerializeField] private SlotBehaviour slotBehaviour;
     [SerializeField] private AudioClip[] BgClips;
 
 
@@ -22,57 +22,39 @@ public class AudioController : MonoBehaviour
         audioSpin_button.clip = clips[5];
     }
 
-    void RecieveReactNativeAudioChanges(bool focus)
-    {
-#if UNITY_WEBGL && !UNITY_EDITOR
-      Application.ExternalEval(@"
-        if(window.ReactNativeWebView){
-          window.ReactNativeWebView.postMessage('Called ReactNative Audio Changes Method.');
-        }
-      ");
-#endif
+    private readonly Dictionary<AudioSource, bool> preFocusMuteState = new Dictionary<AudioSource, bool>();
+    private bool isForceMuted = false;
 
-        if (focus)
-        {
-            if (!bg_adudio.mute) bg_adudio.UnPause();
-            if (slotBehaviour.IsSpinning)
-            {
-                if (!audioPlayer_wl.mute) audioPlayer_wl.UnPause();
-            }
-            else
-            {
-                StopWLAaudio();
-            }
-            if (!audioPlayer_button.mute) audioPlayer_button.UnPause();
-        }
-        else
-        {
-            bg_adudio.Pause();
-            audioPlayer_wl.Pause();
-            audioPlayer_button.Pause();
-        }
+    private IEnumerable<AudioSource> AllManagedSources()
+    {
+        yield return bg_adudio;
+        yield return bg_audioBonus;
+        yield return audioPlayer_button;
+        yield return audioPlayer_wl;
+        yield return audioSpin_button;
+        yield return audioPlayer_Bonus;
     }
 
-    internal void CheckFocusFunction(bool focus, bool IsSpinning)
+    // Focus-driven — called from both UIManager.OnFocusChanged (JS path) and
+    // SlotBehaviour.OnApplicationFocus (native path). Guarded so a duplicate call
+    // for the same direction can't clobber the captured "restore to" state.
+    internal void SetMuteAll(bool forceMute)
     {
-        if (!focus)
+        if (forceMute == isForceMuted) return;
+        isForceMuted = forceMute;
+
+        foreach (var source in AllManagedSources())
         {
-            bg_adudio.Pause();
-            audioPlayer_wl.Pause();
-            audioPlayer_button.Pause();
-        }
-        else
-        {
-            if (!bg_adudio.mute) bg_adudio.UnPause();
-            if (IsSpinning)
+            if (source == null) continue;
+            if (forceMute)
             {
-                if (!audioPlayer_wl.mute) audioPlayer_wl.UnPause();
+                preFocusMuteState[source] = source.mute;
+                source.mute = true;
             }
             else
             {
-                StopWLAaudio();
+                source.mute = preFocusMuteState.TryGetValue(source, out bool prevMuted) ? prevMuted : source.mute;
             }
-            if (!audioPlayer_button.mute) audioPlayer_button.UnPause();
         }
     }
 
@@ -159,18 +141,19 @@ public class AudioController : MonoBehaviour
     }
     internal void ToggleMute(bool toggle, string type)
     {
-        switch (type)
+        AudioSource[] group = type == "music"
+            ? new[] { bg_adudio, bg_audioBonus }
+            : new[] { audioPlayer_button, audioPlayer_wl, audioSpin_button, audioPlayer_Bonus };
+
+        foreach (var source in group)
         {
-            case "music":
-                bg_adudio.mute = toggle;
-                bg_audioBonus.mute = toggle;
-                break;
-            case "sound":
-                audioPlayer_button.mute = toggle;
-                audioPlayer_wl.mute = toggle;
-                audioSpin_button.mute = toggle;
-                audioPlayer_Bonus.mute = toggle;
-                break;
+            if (source == null) continue;
+            // While force-muted (backgrounded), record the user's choice so it's
+            // applied on focus regain instead of being clobbered by SetMuteAll(false).
+            if (isForceMuted)
+                preFocusMuteState[source] = toggle;
+            else
+                source.mute = toggle;
         }
     }
 
