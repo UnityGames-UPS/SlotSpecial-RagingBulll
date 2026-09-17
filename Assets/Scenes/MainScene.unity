@@ -7970,9 +7970,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   UIWrapper: {fileID: 1485219722}
   CanvasScaler: {fileID: 51930702}
-  MatchWidth: 0
-  MatchHeight: 1
-  PortraitMatchWandH: 0.5
   transitionDuration: 0.2
   waitForRotation: 0.2
 --- !u!4 &275023129
@@ -11672,7 +11669,7 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
-  m_ActiveFontFeatures: 00000000
+  m_ActiveFontFeatures: 6e72656b
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
@@ -25315,7 +25312,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Trying to reconnect
+  m_text: Trying to reconnect...
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 316ed9d02528081418b629cf0d4a342e, type: 2}
   m_sharedMaterial: {fileID: 4397338201762098222, guid: 316ed9d02528081418b629cf0d4a342e, type: 2}
@@ -25365,7 +25362,7 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
-  m_ActiveFontFeatures: 00000000
+  m_ActiveFontFeatures: 6e72656b
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
@@ -26335,7 +26332,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 3}
-  m_SizeDelta: {x: 537.85, y: 134.46}
+  m_SizeDelta: {x: 613.13, y: 134.46}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &904112477
 MonoBehaviour:
@@ -26357,7 +26354,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Unable to connect to the server.
+  m_text: Please restart the game.
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 316ed9d02528081418b629cf0d4a342e, type: 2}
   m_sharedMaterial: {fileID: 4397338201762098222, guid: 316ed9d02528081418b629cf0d4a342e, type: 2}
@@ -26407,7 +26404,7 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
-  m_ActiveFontFeatures: 00000000
+  m_ActiveFontFeatures: 6e72656b
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
@@ -39616,7 +39613,7 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
-  m_ActiveFontFeatures: 00000000
+  m_ActiveFontFeatures: 6e72656b
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
@@ -59291,7 +59288,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 101}
-  m_SizeDelta: {x: 537.85, y: 134.46}
+  m_SizeDelta: {x: 620.8, y: 134.46}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2032028188
 MonoBehaviour:
@@ -59313,7 +59310,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Reconnecting...
+  m_text: CONNECTION LOST
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 316ed9d02528081418b629cf0d4a342e, type: 2}
   m_sharedMaterial: {fileID: 4397338201762098222, guid: 316ed9d02528081418b629cf0d4a342e, type: 2}
@@ -59340,7 +59337,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 56.25
+  m_fontSize: 59.5
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -59363,7 +59360,7 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
-  m_ActiveFontFeatures: 00000000
+  m_ActiveFontFeatures: 6e72656b
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
@@ -62907,7 +62904,6 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 317ac723d1c9b4a09a52c3b9de61d4a6, type: 3}
   bg_audioBonus: {fileID: 2088709731818720374}
   audioPlayer_Bonus: {fileID: 4701576512886553455}
-  slotBehaviour: {fileID: 0}
   BgClips:
   - {fileID: 8300000, guid: 8d582ca2b85224da7856cc2b9e78905d, type: 3}
   - {fileID: 8300000, guid: f0fa82e81ca1e46aba8d6a7d0f41357a, type: 3}
