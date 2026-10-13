@@ -199,14 +199,14 @@ public class SlotBehaviour : MonoBehaviour
     private bool IsFreeSpin = false;
     private bool WinAnimationFin = true;
 
-    internal bool IsSpinning = false;
+    private bool IsSpinning = false;
     private bool CheckSpinAudio = false;
     internal bool CheckPopups = false;
 
     private int BetCounter = 0;
     private double currentBalance = 0;
     private double currentTotalBet = 0;
-    protected int Lines = 20;
+    private int Lines = 20;
     int ReelIndexNumber = 0;
 
     [SerializeField] private int IconSizeFactor = 100;       //set this parameter according to the size of the icon and spacing
@@ -671,7 +671,7 @@ public class SlotBehaviour : MonoBehaviour
     #region LinesCalculation
 
     //Destroy Static Lines from button hovers
-    internal void DestroyStaticLine()
+    private void DestroyStaticLine()
     {
         PayCalculator.ResetStaticLine();
     }
@@ -1113,7 +1113,7 @@ public class SlotBehaviour : MonoBehaviour
     }
     #endregion
 
-    internal void CheckWinPopups()
+    private void CheckWinPopups()
     {
 
         Debug.Log("@@@@@ win Amount :" + SocketManager.resultData.payload.winAmount);

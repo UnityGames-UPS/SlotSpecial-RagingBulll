@@ -18,18 +18,18 @@ public class SocketIOManager : MonoBehaviour
   internal Player playerdata = null;
   internal bool isResultdone = false;
   // protected string nameSpace="game"; //BackendChanges
-  protected string nameSpace = "playground"; //BackendChanges
+  private string nameSpace = "playground"; //BackendChanges
   private Socket gameSocket; //BackendChanges
   private SocketManager manager;
-  protected string SocketURI = null;
-  protected string TestSocketURI = "https://devrealtime.dingdinghouse.com/";
+  private string SocketURI = null;
+  private string TestSocketURI = "https://devrealtime.dingdinghouse.com/";
   //protected string TestSocketURI = "http://localhost:5002/";
-  [SerializeField] internal JSFunctCalls JSManager;
+  [SerializeField] private JSFunctCalls JSManager;
   [SerializeField] private string testToken;
-  protected string gameID = "SL-RB";
+  private string gameID = "SL-RB";
   //protected string gameID = "";
-  internal bool isLoaded = false;
-  internal bool SetInit = false;
+  private bool isLoaded = false;
+  private bool SetInit = false;
   private const int maxReconnectionAttempts = 6;
   private readonly TimeSpan reconnectionDelay = TimeSpan.FromSeconds(10);
 

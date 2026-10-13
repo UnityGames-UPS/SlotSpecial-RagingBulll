@@ -7,7 +7,7 @@ public class BoxScripting : MonoBehaviour
     [SerializeField] private Image BoxBg_Image;
     [SerializeField] private GameObject BoxBg_Object;
 
-    internal void SetBG(Sprite bg)
+    private void SetBG(Sprite bg)
     {
         if (isAnim)
         {

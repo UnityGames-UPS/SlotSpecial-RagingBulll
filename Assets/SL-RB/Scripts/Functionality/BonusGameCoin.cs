@@ -4,5 +4,5 @@ using UnityEngine;
 
 public class BonusGameCoin : MonoBehaviour
 {
-    public bool IsCoinClicked ;
+    [SerializeField] internal bool IsCoinClicked ;
 }

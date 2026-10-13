@@ -16,7 +16,7 @@ public class UIManager : MonoBehaviour
     [Header("Win Popup")]
     [SerializeField] private Image Win_Image;
 
-    [SerializeField] public RectTransform Win_Image_RT;
+    [SerializeField] private RectTransform Win_Image_RT;
 
     [SerializeField] private GameObject WinPopup_Object;
     [SerializeField] private RectTransform WinBgAnimation;
@@ -53,7 +53,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private RectTransform MusicToggle_RT;
 
     [Header("Paytable Objects")]
-    [SerializeField] internal GameObject PaytableMenuObject;
+    [SerializeField] private GameObject PaytableMenuObject;
     [SerializeField] private Button Paytable_Button;
     [SerializeField] private Button PaytableClose_Button;
     [SerializeField] private Button PaytableLeft_Button;
@@ -102,11 +102,11 @@ public class UIManager : MonoBehaviour
     [SerializeField] private SocketIOManager socketManager;
 
     [Header(" BG Theme Images")]
-    public Sprite[] BG_ThemeSprites;
-    public Sprite[] Reels_BGSprites;
+    [SerializeField] internal Sprite[] BG_ThemeSprites;
+    [SerializeField] internal Sprite[] Reels_BGSprites;
 
-    public Image Reels_BgImage;
-    public Image Bg_ThemeImage;
+    [SerializeField] internal Image Reels_BgImage;
+    [SerializeField] internal Image Bg_ThemeImage;
     private Tween WinPopupTextTween;
     private bool isMusic = true;
     private bool isSound = true;
@@ -611,7 +611,7 @@ public class UIManager : MonoBehaviour
         if (MainPopup_Object) MainPopup_Object.SetActive(true);
     }
 
-    internal void ClosePopup(GameObject Popup)
+    private void ClosePopup(GameObject Popup)
     {
         if (audioController) audioController.PlayButtonAudio();
         if (Popup) Popup.SetActive(false);

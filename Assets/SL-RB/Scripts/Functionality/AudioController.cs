@@ -4,9 +4,9 @@ using UnityEngine;
 public class AudioController : MonoBehaviour
 {
     [SerializeField] private AudioSource bg_adudio;
-    [SerializeField] internal AudioSource audioPlayer_wl;
-    [SerializeField] internal AudioSource audioPlayer_button;
-    [SerializeField] internal AudioSource audioSpin_button;
+    [SerializeField] private AudioSource audioPlayer_wl;
+    [SerializeField] private AudioSource audioPlayer_button;
+    [SerializeField] private AudioSource audioSpin_button;
     [SerializeField] private AudioClip[] clips;
     [SerializeField] private AudioClip[] Bonusclips;
     [SerializeField] private AudioSource bg_audioBonus;
@@ -58,7 +58,7 @@ public class AudioController : MonoBehaviour
         }
     }
 
-    internal void SwitchBGSound(bool isbonus)
+    private void SwitchBGSound(bool isbonus)
     {
         if (isbonus)
         {
